@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Reporte Mantenimiento Universitario</title>
+<style>
+  @page { size: Letter; margin: 1.8cm 1.9cm; }
+  body { font-family: "Inter", "Segoe UI", Arial, sans-serif; color: #1f2937; font-size: 10.5pt; line-height: 1.45; }
+  h1 { color: #0b4f8a; font-size: 22pt; margin: 0 0 6px; line-height: 1.2; }
+  h2 { color: #0b4f8a; font-size: 15pt; border-bottom: 2px solid #0b4f8a; padding-bottom: 4px; margin-top: 24px; break-after: avoid; }
+  h3 { color: #0b4f8a; font-size: 12pt; margin-top: 16px; break-after: avoid; }
+  p { margin: 6px 0; }
+  table { width: 100%; border-collapse: collapse; margin: 8px 0 12px; font-size: 9pt; }
+  tr { break-inside: avoid; }
+  th, td { border: 1px solid #cbd5e1; padding: 5px 7px; text-align: left; vertical-align: top; }
+  th { background: #e7f0f9; color: #0b4f8a; }
+  td:first-child { font-weight: 600; }
+  table.plain td:first-child { font-weight: normal; }
+  code { font-family: "JetBrains Mono", Consolas, Menlo, monospace; font-size: 8pt; background: #f1f5f9; border-radius: 3px; padding: 0 3px; word-break: break-word; }
+  pre { font-family: "JetBrains Mono", Consolas, Menlo, monospace; font-size: 8pt; background: #f1f5f9; border-radius: 4px; padding: 8px 10px; white-space: pre-wrap; break-inside: avoid; margin: 6px 0; }
+  .cover { height: 23.5cm; display: flex; flex-direction: column; justify-content: center; break-after: page; }
+  .cover .act { font-size: 12pt; color: #0b4f8a; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; margin-bottom: 8px; }
+  .cover .sub { font-size: 13pt; color: #475569; margin: 6px 0 36px; }
+  .cover table { font-size: 10.5pt; }
+  .cover table td:first-child { width: 30%; }
+  .shots { display: flex; gap: 12px; justify-content: center; break-inside: avoid; margin: 10px 0; }
+  .shots figure { margin: 0; text-align: center; width: 31%; }
+  .shots.four figure { width: 23.5%; }
+  .shots img { width: 100%; border: 1px solid #cbd5e1; border-radius: 8px; }
+  figcaption { font-size: 8pt; color: #475569; margin-top: 3px; line-height: 1.3; }
+  .note { background: #fff8e1; border-left: 4px solid #d4a017; padding: 7px 11px; font-size: 9.5pt; break-inside: avoid; margin: 8px 0; }
+  .info { background: #eef5fc; border-left: 4px solid #0b4f8a; padding: 7px 11px; font-size: 9.5pt; break-inside: avoid; margin: 8px 0; }
+  .ok { color: #1a7f37; font-weight: 700; }
+  .page-break { break-before: page; }
+  .tag { display: inline-block; font-size: 7.5pt; font-weight: 700; padding: 1px 6px; border-radius: 999px; color: #fff; }
+  .t-app { background: #475569; } .t-auth { background: #7c3aed; } .t-api { background: #0b4f8a; } .t-sto { background: #b45309; } .t-db { background: #15803d; }
+  .qa { break-inside: avoid; margin: 10px 0; }
+  .qa h3 { margin-bottom: 4px; }
+  ul { margin: 4px 0 6px; padding-left: 20px; } li { margin: 2px 0; }
+
+  /* Diagrama de flujo */
+  .flow { display: grid; grid-template-columns: 250px 1fr; column-gap: 14px; font-size: 8.4pt; margin-top: 6px; }
+  .flow .n { display: flex; flex-direction: column; align-items: center; }
+  .box { width: 230px; border: 1.5px solid; border-radius: 8px; padding: 5px 8px; text-align: center; font-weight: 600; background: #fff; box-sizing: border-box; }
+  .box.start { border-radius: 999px; background: #1f2937; color: #fff; border-color: #1f2937; }
+  .b-app { border-color: #475569; background: #f8fafc; } .b-auth { border-color: #7c3aed; background: #f5f3ff; }
+  .b-api { border-color: #0b4f8a; background: #eef5fc; } .b-sto { border-color: #b45309; background: #fff7ed; }
+  .num { display: inline-block; width: 15px; height: 15px; line-height: 15px; border-radius: 50%; background: #0b4f8a; color: #fff; font-size: 7.5pt; margin-right: 4px; }
+  .arrow { width: 2px; height: 12px; background: #64748b; position: relative; }
+  .arrow::after { content: ""; position: absolute; bottom: -5px; left: -4px; border: 5px solid transparent; border-top-color: #64748b; border-bottom: 0; }
+  .diamond { width: 230px; height: 46px; display: flex; align-items: center; justify-content: center; position: relative; font-weight: 700; font-size: 8pt; }
+  .diamond svg { position: absolute; inset: 0; }
+  .diamond span { position: relative; }
+  .det { border-left: 3px solid #cbd5e1; padding: 3px 0 3px 9px; margin: 1px 0; align-self: center; }
+  .det b { color: #0b4f8a; }
+  .det.no { border-left-color: #c62828; } .det.no b { color: #c62828; }
+  .flowrow { display: contents; break-inside: avoid; }
+</style>
+</head>
+<body>
+
+<!-- ============================ PORTADA ============================ -->
+<section class="cover">
+  <div class="act">Actividad 22 · Caso de estudio (individual)</div>
+  <h1>Implementación de una aplicación móvil para la gestión de reportes de mantenimiento universitario</h1>
+  <div class="sub">Documento técnico: componentes y servicios en la nube, integración móvil-nube, codificación segura, operaciones de integración, pruebas y aplicación funcionando</div>
+  <table>
+    <tr><td>Alumno</td><td>Octavio Duarte Villavicencio</td></tr>
+    <tr><td>Grupo</td><td>IDGS-101</td></tr>
+    <tr><td>Docente</td><td>Roberto Vinicio Camacho Mendoza</td></tr>
+    <tr><td>Aplicación</td><td><b>Mantenimiento UTVT</b> · proyecto <code>reportes-mantenimiento</code></td></tr>
+    <tr><td>Tecnologías</td><td>React Native 0.88 + Expo SDK 58 (Expo Router) · Supabase (Auth, API REST, PostgreSQL con RLS, Storage)</td></tr>
+    <tr><td>Fecha</td><td>12 de noviembre de 2026</td></tr>
+  </table>
+</section>
+
+<!-- ============================ INTRODUCCIÓN ============================ -->
+<h2>Introducción y análisis del caso</h2>
+<p>Hoy los reportes de fallas de infraestructura (equipos de cómputo, iluminación, mobiliario, internet e instalaciones eléctricas) se hacen en persona o por mensajes informales. Así no hay folio ni historial, el estado de atención no se puede consultar y no queda evidencia.</p>
+<p>La propuesta es <b>Mantenimiento UTVT</b>, una app móvil multiplataforma (Android/iOS) que se conecta a un backend en la nube. Estudiantes y personal administrativo inician sesión, registran un reporte con categoría, ubicación, descripción y una foto opcional, y consultan el estado de sus reportes. El personal de mantenimiento ve todos los reportes y actualiza su estado. Cada usuario solo accede a lo que le permite su rol, y esa regla la aplica el servidor, no la app.</p>
+<table class="plain">
+  <tr><th style="width:24%">Requisito del caso</th><th>Cómo se resuelve</th></tr>
+  <tr><td>1. Autenticación</td><td>Correo y contraseña contra <b>Supabase Auth</b> (servicio remoto). Devuelve un <b>JWT</b> de acceso (1 h) y un <i>refresh token</i>; se guardan cifrados en el dispositivo.</td></tr>
+  <tr><td>2. Registro de reportes</td><td><code>POST /rest/v1/reportes</code> con categoría, edificio, aula y descripción. El servidor asigna <b>folio, usuario, estado y fecha de registro</b>.</td></tr>
+  <tr><td>3. Consulta de reportes</td><td><code>GET /rest/v1/reportes</code>. Las políticas RLS de PostgreSQL devuelven solo los reportes del usuario (o todos si su rol es mantenimiento).</td></tr>
+  <tr><td>4. Evidencia fotográfica</td><td>La foto se sube a un <b>bucket privado de Supabase Storage</b>. En la BD solo se guarda su ruta, y para verla se generan <b>URL firmadas</b> temporales.</td></tr>
+  <tr><td>5. Seguridad</td><td>HTTPS, JWT, roles definidos en el servidor, <b>Row Level Security</b>, permisos por columna, validación en cliente y servidor, almacenamiento seguro de tokens.</td></tr>
+</table>
+
+<!-- ============================ PARTE 1 ============================ -->
+<h2>Parte 1. Identificación de componentes y servicios</h2>
+<table>
+  <tr><th style="width:15%">Componente</th><th style="width:19%">Tecnología / servicio propuesto</th><th style="width:30%">Función en la solución</th><th>Justificación de la elección</th></tr>
+  <tr><td>Aplicación móvil (cliente)</td><td>React Native 0.88 + Expo SDK 58, TypeScript, Expo Router</td><td>Interfaz para iniciar sesión, registrar, consultar y dar seguimiento a reportes. Valida los datos antes de enviarlos.</td><td>Un solo código para Android e iOS. Expo incluye cámara, galería y almacenamiento seguro, y Expo Router permite proteger pantallas según haya sesión o no.</td></tr>
+  <tr><td>Servicio de autenticación</td><td>Supabase Auth (GoTrue), correo y contraseña</td><td>Registra usuarios, valida credenciales y emite el <b>access token JWT</b> (1 h) y el <b>refresh token</b>. También revoca sesiones.</td><td>Servicio gestionado basado en estándares (OAuth2/JWT). Guarda las contraseñas con hash bcrypt, limita intentos (<i>rate limit</i>) y permite confirmar correo, así que no hay que programar nada de eso a mano.</td></tr>
+  <tr><td>API de datos (servicio web)</td><td>API REST de Supabase (PostgREST) sobre HTTPS</td><td>Expone las operaciones de reportes (<code>GET/POST/PATCH /rest/v1/reportes</code>) en formato JSON.</td><td>Se genera a partir del esquema de la base de datos y recibe el JWT del usuario. Las reglas de acceso viven en la BD y no dependen del código de la app.</td></tr>
+  <tr><td>Base de datos en la nube</td><td>Supabase PostgreSQL con <b>Row Level Security</b></td><td>Guarda perfiles (tipo y rol) y reportes (categoría, ubicación, descripción, estado, fecha, ruta de la foto).</td><td>Base relacional con restricciones <code>CHECK</code>, permisos por columna y políticas RLS que filtran cada fila según <code>auth.uid()</code> y el rol.</td></tr>
+  <tr><td>Almacenamiento de archivos</td><td>Supabase Storage, bucket privado <code>evidencias</code></td><td>Guarda las fotografías en <code>evidencias/&lt;uid&gt;/&lt;id&gt;.jpg</code> y entrega URL firmadas temporales.</td><td>Separa los archivos binarios de la BD. El bucket limita tipo (JPG/PNG/WEBP) y tamaño (5 MB) en el servidor, y RLS impide escribir en la carpeta de otro usuario.</td></tr>
+  <tr><td>Gestión de sesión en el dispositivo</td><td><code>expo-secure-store</code> (Android Keystore / iOS Keychain)</td><td>Guarda cifrados el access token y el refresh token. La sesión se renueva sola mientras la app está activa.</td><td>Evita dejar tokens en texto plano (AsyncStorage). Si alguien extrae los archivos de la app, no puede reutilizar la sesión.</td></tr>
+  <tr><td>Conectividad y modo sin conexión</td><td><code>@react-native-community/netinfo</code> + AsyncStorage (cola local)</td><td>Detecta si hay internet. Sin conexión, el reporte se guarda en una <b>cola local</b> y se reintenta después. También guarda la última consulta en caché.</td><td>En el campus la red falla con frecuencia, y así el usuario no pierde lo que capturó. Cada reporte lleva un <code>id_cliente</code> único para que los reintentos no generen duplicados.</td></tr>
+  <tr><td>Cámara y galería</td><td><code>expo-image-picker</code>, <code>expo-image</code></td><td>Capturan o seleccionan la evidencia, muestran la vista previa y la imagen remota.</td><td>Se piden permisos en tiempo de ejecución con textos claros. Se usa <code>quality: 0.6</code> y <code>exif: false</code> para reducir el peso de la foto y no enviar metadatos como la ubicación GPS.</td></tr>
+  <tr><td>Canal de comunicación</td><td>HTTPS (TLS 1.2+) con JSON</td><td>Transporta todas las solicitudes con los encabezados <code>apikey</code> y <code>Authorization: Bearer &lt;JWT&gt;</code>.</td><td>Cifra los datos en tránsito y evita la intercepción de credenciales y tokens.</td></tr>
+  <tr><td>Configuración / secretos</td><td>Variables <code>EXPO_PUBLIC_*</code> (solo URL y clave pública <i>anon</i>)</td><td>Indican a la app qué proyecto usar.</td><td>La clave <i>anon</i> es pública por diseño y la protección real está en RLS. La clave <code>service_role</code> <b>nunca</b> se incluye en la app.</td></tr>
+</table>
+<div class="note"><b>Alternativa evaluada:</b> Firebase (Authentication + Firestore + Cloud Storage) ofrece las mismas capacidades. Elegí Supabase porque los reportes son datos relacionales (usuario → reportes → estados), porque las reglas de seguridad se escriben en SQL estándar (RLS) y porque tiene un plan gratuito suficiente para el prototipo.</div>
+
+<!-- ============================ PARTE 2 ============================ -->
+<h2 class="page-break">Parte 2. Diseño del proceso de integración móvil-nube</h2>
+<p>La app nunca accede directamente a la base de datos. Todas las operaciones son <b>solicitudes HTTPS</b> a los servicios de Supabase, con dos encabezados: <code>apikey</code> (identifica el proyecto, es pública) y <code>Authorization: Bearer &lt;JWT&gt;</code> (identifica al usuario). El servidor valida la firma del JWT, toma el <code>uid</code> y el rol y aplica las políticas antes de leer o escribir.</p>
+
+<svg viewBox="0 0 700 190" width="100%" style="max-width:700px;display:block;margin:6px auto 4px" font-family="Inter, Arial" font-size="11">
+  <defs><marker id="m" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#64748b"/></marker></defs>
+  <rect x="8" y="35" width="150" height="120" rx="14" fill="#f8fafc" stroke="#475569" stroke-width="1.5"/>
+  <text x="83" y="60" text-anchor="middle" font-weight="700" fill="#1f2937">App móvil</text>
+  <text x="83" y="77" text-anchor="middle" fill="#475569" font-size="9.5">React Native + Expo</text>
+  <text x="83" y="100" text-anchor="middle" fill="#475569" font-size="9.5">SecureStore (tokens)</text>
+  <text x="83" y="115" text-anchor="middle" fill="#475569" font-size="9.5">Cola local offline</text>
+  <text x="83" y="130" text-anchor="middle" fill="#475569" font-size="9.5">Validación de datos</text>
+  <line x1="160" y1="95" x2="262" y2="95" stroke="#64748b" stroke-width="2" marker-end="url(#m)" marker-start="url(#m)"/>
+  <text x="211" y="86" text-anchor="middle" font-size="9.5" fill="#1f2937" font-weight="700">HTTPS / JSON</text>
+  <text x="211" y="110" text-anchor="middle" font-size="8.5" fill="#475569">apikey + Bearer JWT</text>
+  <rect x="265" y="8" width="427" height="175" rx="14" fill="#f8fbff" stroke="#0b4f8a" stroke-dasharray="5 4"/>
+  <text x="478" y="26" text-anchor="middle" font-weight="700" fill="#0b4f8a">Supabase (nube)</text>
+  <rect x="280" y="38" width="125" height="58" rx="8" fill="#f5f3ff" stroke="#7c3aed"/>
+  <text x="342" y="60" text-anchor="middle" font-weight="700" fill="#5b21b6">Auth</text>
+  <text x="342" y="76" text-anchor="middle" font-size="9" fill="#475569">/auth/v1 · emite JWT</text>
+  <rect x="280" y="110" width="125" height="58" rx="8" fill="#eef5fc" stroke="#0b4f8a"/>
+  <text x="342" y="132" text-anchor="middle" font-weight="700" fill="#0b4f8a">API REST</text>
+  <text x="342" y="148" text-anchor="middle" font-size="9" fill="#475569">/rest/v1/reportes</text>
+  <rect x="420" y="110" width="125" height="58" rx="8" fill="#f0fdf4" stroke="#15803d"/>
+  <text x="482" y="130" text-anchor="middle" font-weight="700" fill="#15803d">PostgreSQL</text>
+  <text x="482" y="145" text-anchor="middle" font-size="9" fill="#475569">perfiles · reportes</text>
+  <text x="482" y="158" text-anchor="middle" font-size="9" fill="#475569">Row Level Security</text>
+  <rect x="560" y="110" width="122" height="58" rx="8" fill="#fff7ed" stroke="#b45309"/>
+  <text x="621" y="130" text-anchor="middle" font-weight="700" fill="#b45309">Storage</text>
+  <text x="621" y="145" text-anchor="middle" font-size="9" fill="#475569">bucket privado</text>
+  <text x="621" y="158" text-anchor="middle" font-size="9" fill="#475569">“evidencias”</text>
+  <line x1="405" y1="139" x2="418" y2="139" stroke="#64748b" stroke-width="1.5" marker-end="url(#m)"/>
+  <line x1="405" y1="67" x2="482" y2="67" stroke="#94a3b8" stroke-dasharray="3 3"/><line x1="482" y1="67" x2="482" y2="108" stroke="#94a3b8" stroke-dasharray="3 3" marker-end="url(#m)"/>
+  <text x="560" y="62" font-size="8.5" fill="#64748b">Trigger crea perfil</text>
+  <text x="560" y="74" font-size="8.5" fill="#64748b">y rol al registrarse</text>
+</svg>
+
+<h3>Diagrama de flujo del proceso (qué se envía, qué servicio interviene y qué responde)</h3>
+<p style="font-size:9pt">Leyenda: <span class="tag t-app">App móvil</span> <span class="tag t-auth">Supabase Auth</span> <span class="tag t-api">API REST + PostgreSQL</span> <span class="tag t-sto">Storage</span></p>
+
+<div class="flow">
+  <div class="n"><div class="box start">Inicio</div><div class="arrow"></div></div><div></div>
+
+  <div class="n"><div class="box b-app"><span class="num">1</span>El usuario abre la aplicación</div><div class="arrow"></div></div>
+  <div class="det"><b>Servicio:</b> app (local). Lee la sesión guardada en SecureStore. <b>Si existe y es válida</b>, la renueva y salta al paso 9. Si no, muestra la pantalla de inicio de sesión.</div>
+
+  <div class="n"><div class="box b-app"><span class="num">2</span>Ingresa correo y contraseña</div><div class="arrow"></div></div>
+  <div class="det"><b>Validación local:</b> correo con formato válido, contraseña no vacía. ¿Hay internet? (NetInfo). Si no hay, avisa y no envía nada.</div>
+
+  <div class="n"><div class="box b-auth"><span class="num">3</span>Envía la solicitud de autenticación</div><div class="arrow"></div></div>
+  <div class="det"><b>Envía:</b> <code>POST /auth/v1/token?grant_type=password</code> · cuerpo <code>{ email, password }</code> por HTTPS · encabezado <code>apikey</code>.<br><b>Servicio:</b> Supabase Auth.</div>
+
+  <div class="n"><div class="diamond"><svg viewBox="0 0 230 46" preserveAspectRatio="none"><polygon points="115,1 229,23 115,45 1,23" fill="#f5f3ff" stroke="#7c3aed" stroke-width="1.5"/></svg><span><span class="num">4</span>¿Credenciales válidas?</span></div><div class="arrow"></div></div>
+  <div class="det"><b>Respuesta OK:</b> <code>200</code> + <code>{ access_token, refresh_token, expires_in: 3600, user }</code>.<br><span style="color:#c62828"><b>No:</b> <code>400 invalid_credentials</code> → la app muestra “Correo o contraseña incorrectos” (mensaje genérico), limpia la contraseña y vuelve al paso 2. Tras 5 fallos bloquea 60 s.</span></div>
+
+  <div class="n"><div class="box b-app"><span class="num">5</span>Guarda y usa el token de acceso</div><div class="arrow"></div></div>
+  <div class="det"><b>App:</b> guarda los tokens cifrados (Keystore/Keychain), consulta el perfil (<code>GET /rest/v1/perfiles?id=eq.&lt;uid&gt;</code> → <code>{ nombre, tipo, rol }</code>) y desde aquí agrega <code>Authorization: Bearer &lt;JWT&gt;</code> a cada solicitud. Renueva el token antes de que expire con <code>grant_type=refresh_token</code>.</div>
+
+  <div class="n"><div class="box b-app"><span class="num">6</span>El usuario registra un reporte</div><div class="arrow"></div></div>
+  <div class="det"><b>Captura:</b> categoría, edificio, aula, descripción y foto opcional. <b>Valida:</b> campos obligatorios, longitudes, formato y tamaño de la foto (≤ 5 MB). La <b>fecha</b> no la captura el usuario; la asigna el servidor.</div>
+
+  <div class="n"><div class="diamond"><svg viewBox="0 0 230 46" preserveAspectRatio="none"><polygon points="115,1 229,23 115,45 1,23" fill="#f8fafc" stroke="#475569" stroke-width="1.5"/></svg><span>¿Hay conexión?</span></div><div class="arrow"></div></div>
+  <div class="det no"><b>No:</b> guarda el reporte en la <b>cola local</b> (sin tokens), avisa al usuario y lo reintenta después con “Reintentar envío”. Si el servicio responde con error 5xx o se agota el tiempo (20 s), hace lo mismo.</div>
+
+  <div class="n"><div class="box b-api"><span class="num">7</span>Envía los datos a la API (HTTP)</div><div class="arrow"></div></div>
+  <div class="det"><b>7a (si hay foto):</b> <code>POST /storage/v1/object/evidencias/&lt;uid&gt;/&lt;id&gt;.jpg</code> (binario, <code>Content-Type: image/jpeg</code>) → <span class="tag t-sto">Storage</span> responde <code>200 { Key }</code>.<br><b>7b:</b> <code>POST /rest/v1/reportes</code> con JSON <code>{ categoria, edificio, aula, descripcion, foto_path, id_cliente }</code> + <code>Bearer JWT</code>.</div>
+
+  <div class="n"><div class="box b-api"><span class="num">8</span>El servicio almacena y responde</div><div class="arrow"></div></div>
+  <div class="det"><b>Servicio:</b> PostgreSQL valida el JWT, los <code>CHECK</code> y la política RLS (<code>user_id = auth.uid()</code>), y asigna <code>folio</code>, <code>estado='pendiente'</code> y <code>fecha_registro=now()</code>.<br><b>Respuesta:</b> <code>201 Created</code> + el reporte creado. Errores: <code>400</code> datos inválidos, <code>401</code> token vencido, <code>403</code> sin permiso.</div>
+
+  <div class="n"><div class="box b-api"><span class="num">9</span>Consulta los reportes y los muestra</div><div class="arrow"></div></div>
+  <div class="det"><b>Envía:</b> <code>GET /rest/v1/reportes?order=fecha_registro.desc</code> + <code>Bearer JWT</code>. <b>Respuesta:</b> <code>200</code> + arreglo JSON (RLS devuelve solo los reportes del usuario, o todos si su rol es mantenimiento). Después pide las URL firmadas de las fotos (<code>POST /storage/v1/object/sign/evidencias</code> → <code>{ signedURL }</code>, 10 min) y muestra la lista con folio, estado y fecha.</div>
+
+  <div class="n"><div class="box start">Fin · el usuario da seguimiento al estado</div></div><div></div>
+</div>
+
+<h3>Respuestas esperadas por código HTTP</h3>
+<table class="plain">
+  <tr><th style="width:14%">Código</th><th style="width:30%">Significado</th><th>Comportamiento de la app</th></tr>
+  <tr><td>200 / 201</td><td>Operación correcta / recurso creado</td><td>Muestra los datos o el folio asignado.</td></tr>
+  <tr><td>400</td><td>Credenciales o datos inválidos</td><td>Mensaje claro junto al campo. No se reintenta.</td></tr>
+  <tr><td>401</td><td>Token ausente, vencido o alterado</td><td>Intenta renovar con el refresh token. Si no se puede, cierra la sesión y pide iniciarla de nuevo.</td></tr>
+  <tr><td>403 / 42501</td><td>Sin permiso (RLS o privilegios)</td><td>“No tienes permiso para realizar esta operación”.</td></tr>
+  <tr><td>5xx / timeout / sin red</td><td>Servicio no disponible</td><td>Guarda el reporte en la cola local y muestra la última consulta en caché.</td></tr>
+</table>
+
+<!-- ============================ PARTE 3 ============================ -->
+<h2 class="page-break">Parte 3. Especificación de principios de codificación segura</h2>
+<table>
+  <tr><th style="width:4%">#</th><th style="width:17%">Riesgo</th><th style="width:25%">Descripción / impacto</th><th style="width:27%">Medida de prevención</th><th>Implementación en la solución</th></tr>
+  <tr><td>1</td><td>Credenciales o claves expuestas en la app</td><td>Cualquiera puede descompilar un APK. Si la app incluye una clave de administrador, el atacante obtiene control total de la BD.</td><td>Solo incluir claves públicas. Las reglas de acceso se aplican en el servidor.</td><td>La app solo trae la URL y la clave <i>anon</i>. La <code>service_role</code> nunca sale del panel de Supabase. <code>.env</code> está excluido de Git.</td></tr>
+  <tr><td>2</td><td>Acceso a reportes de otro usuario (IDOR / control de acceso roto)</td><td>Cambiar un ID en la solicitud podría exponer o modificar reportes ajenos.</td><td>Autorización en el servidor por fila y por rol, sin confiar en filtros del cliente.</td><td>Políticas RLS: <code>select</code> si <code>user_id = auth.uid()</code> o rol mantenimiento. <code>update</code> solo para mantenimiento. El rol lo asigna el servidor y el usuario no puede cambiarlo.</td></tr>
+  <tr><td>3</td><td>Robo o manipulación del token de sesión</td><td>Un token en texto plano puede robarse y usarse para suplantar al usuario.</td><td>Tokens de vida corta, firmados y guardados en almacenamiento seguro.</td><td>JWT firmado de 1 h con refresh token rotatorio, guardado en SecureStore (Keystore/Keychain). <code>signOut()</code> revoca la sesión. Un JWT alterado recibe <code>401</code>.</td></tr>
+  <tr><td>4</td><td>Inyección y datos maliciosos o inválidos</td><td>Texto con SQL o scripts, campos enormes o categorías inventadas pueden corromper datos o causar fallos.</td><td>Validar en cliente <b>y</b> servidor. Usar consultas parametrizadas y listas blancas.</td><td>La app valida longitudes y categorías. La BD repite las reglas con <code>CHECK</code>. PostgREST parametriza las consultas. Permisos por columna: el cliente no puede enviar <code>user_id</code>, <code>estado</code> ni <code>fecha_registro</code>.</td></tr>
+  <tr><td>5</td><td>Subida de archivos maliciosos o excesivos</td><td>Un ejecutable disfrazado o un archivo enorme pueden llenar el almacenamiento o servir malware.</td><td>Lista blanca de tipos MIME, límite de tamaño y nombres generados por el sistema.</td><td>El bucket acepta solo JPG/PNG/WEBP de hasta 5 MB (validación en el servidor). El nombre es <code>&lt;uid&gt;/&lt;uuid&gt;.jpg</code>, no el que elige el usuario. Sin <code>upsert</code> no se puede sobrescribir.</td></tr>
+  <tr><td>6</td><td>Fuerza bruta y enumeración de usuarios</td><td>Probar contraseñas masivamente o saber qué correos existen a partir de mensajes distintos.</td><td>Limitar intentos y usar mensajes genéricos.</td><td>Rate limit de Supabase Auth, bloqueo local de 60 s tras 5 fallos y el mensaje único “Correo o contraseña incorrectos”. Política de contraseña de mínimo 8 caracteres con mayúsculas, minúsculas y números.</td></tr>
+  <tr><td>7</td><td>Intercepción de tráfico (MITM)</td><td>En el Wi-Fi del campus, un atacante podría leer credenciales.</td><td>Usar solo HTTPS/TLS.</td><td>Todos los endpoints de Supabase son <code>https://</code>. Android bloquea el tráfico HTTP sin cifrar por defecto.</td></tr>
+  <tr><td>8</td><td>Fuga de información en errores y metadatos</td><td>Mensajes técnicos o EXIF con GPS revelan detalles internos o la ubicación del usuario.</td><td>Mensajes controlados y metadatos mínimos.</td><td><code>traducirError()</code> convierte los errores en mensajes amigables sin trazas. Las fotos se toman con <code>exif: false</code>.</td></tr>
+</table>
+
+<h3>Medida adicional: almacenamiento cifrado de la sesión (SecureStore) y su justificación</h3>
+<p>Por defecto, el cliente de Supabase en React Native guarda la sesión en <b>AsyncStorage</b>, que es un archivo <b>sin cifrar</b> dentro del almacenamiento de la app. En un teléfono con root, en un respaldo o con malware, el <i>refresh token</i> se podría copiar y usar para obtener nuevos access tokens sin conocer la contraseña. Por eso implementé un adaptador (<code>src/lib/almacenSeguro.ts</code>) que guarda la sesión en <b>Android Keystore / iOS Keychain</b> con <code>expo-secure-store</code>. Como SecureStore admite valores de unos 2 KB, la sesión se divide en fragmentos.</p>
+<p><b>Por qué es necesaria:</b> el token es en la práctica la credencial del usuario mientras la sesión está activa. Protegerlo con cifrado del sistema operativo evita que el robo de archivos del dispositivo se convierta en suplantación. Se complementa con la expiración corta del JWT y con la revocación al cerrar sesión.</p>
+<p><b>Otras dos medidas adicionales:</b> (a) <b>idempotencia</b>: cada reporte lleva un <code>id_cliente</code> UUID único, así que si un reintento ocurre después de una respuesta perdida, el servidor responde con conflicto (<code>23505</code>) y no se duplica. (b) <b>Principio de mínimo privilegio en la BD</b>: <code>anon</code> no tiene ningún permiso y <code>authenticated</code> solo puede insertar 6 columnas y actualizar <code>estado</code>; además no existen políticas de borrado de reportes ni de evidencias.</p>
+
+<pre>-- Extracto de supabase/schema.sql
+grant insert (categoria, edificio, aula, descripcion, foto_path, id_cliente) on public.reportes to authenticated;
+grant update (estado) on public.reportes to authenticated;          -- RLS lo limita a mantenimiento
+
+create policy "reportes_select" on public.reportes for select to authenticated
+using (user_id = (select auth.uid()) or (select public.es_mantenimiento()));
+
+create policy "reportes_insert_propio" on public.reportes for insert to authenticated
+with check (user_id = (select auth.uid())
+  and (foto_path is null or split_part(foto_path, '/', 1) = (select auth.uid())::text));</pre>
+
+<!-- ============================ PARTE 4 ============================ -->
+<h2 class="page-break">Parte 4. Especificación de operaciones de integración</h2>
+<p>Todas las URL son relativas a <code>https://&lt;proyecto&gt;.supabase.co</code>. Encabezados comunes: <code>apikey: &lt;anon&gt;</code> y, salvo en el inicio de sesión y el registro, <code>Authorization: Bearer &lt;access_token&gt;</code>.</p>
+<table>
+  <tr><th style="width:14%">Operación</th><th style="width:8%">Método</th><th style="width:20%">Endpoint / servicio</th><th style="width:21%">Datos enviados</th><th style="width:20%">Respuesta esperada</th><th>Seguridad / restricción</th></tr>
+  <tr><td>Registrar cuenta</td><td>POST</td><td><code>/auth/v1/signup</code> · Auth</td><td><code>{ email, password, data: { nombre, tipo } }</code></td><td><code>200</code> + usuario (y sesión si no requiere confirmar correo)</td><td>Política de contraseña. Un trigger crea el perfil con rol <code>usuario</code>; el rol mantenimiento no se acepta del cliente.</td></tr>
+  <tr><td>Iniciar sesión</td><td>POST</td><td><code>/auth/v1/token?grant_type=password</code> · Auth</td><td><code>{ email, password }</code></td><td><code>200 { access_token, refresh_token, expires_in, user }</code> · <code>400</code> si es inválido</td><td>HTTPS, rate limit, mensaje genérico, bloqueo local tras 5 fallos.</td></tr>
+  <tr><td>Renovar token</td><td>POST</td><td><code>/auth/v1/token?grant_type=refresh_token</code> · Auth</td><td><code>{ refresh_token }</code></td><td><code>200</code> + nuevos tokens</td><td>Refresh token de un solo uso (rotación). Solo mientras la app está activa.</td></tr>
+  <tr><td>Consultar perfil y rol</td><td>GET</td><td><code>/rest/v1/perfiles?id=eq.&lt;uid&gt;</code> · API</td><td>JWT</td><td><code>200 [{ nombre, tipo, rol }]</code></td><td>RLS: solo el propio perfil. Sin permisos de escritura.</td></tr>
+  <tr><td>Subir evidencia</td><td>POST</td><td><code>/storage/v1/object/evidencias/&lt;uid&gt;/&lt;uuid&gt;.jpg</code> · Storage</td><td>Binario de la imagen + <code>Content-Type</code></td><td><code>200 { Key }</code> · <code>400/413</code> tipo o tamaño inválido · <code>403</code> carpeta ajena</td><td>Bucket privado, JPG/PNG/WEBP ≤ 5 MB, solo en la carpeta propia, sin sobrescritura.</td></tr>
+  <tr><td>Registrar reporte</td><td>POST</td><td><code>/rest/v1/reportes</code> · API + PostgreSQL</td><td><code>{ categoria, edificio, aula, descripcion, foto_path, id_cliente }</code></td><td><code>201</code> + reporte con <code>folio, estado, fecha_registro</code></td><td>CHECK en BD, permisos por columna, RLS <code>user_id = auth.uid()</code>, <code>id_cliente</code> único.</td></tr>
+  <tr><td>Consultar mis reportes</td><td>GET</td><td><code>/rest/v1/reportes?order=fecha_registro.desc&amp;estado=eq.&lt;estado&gt;</code></td><td>JWT (+ filtro opcional)</td><td><code>200 [ … ]</code></td><td>RLS devuelve solo los propios (o todos si es mantenimiento). Límite de 100.</td></tr>
+  <tr><td>Consultar detalle</td><td>GET</td><td><code>/rest/v1/reportes?id=eq.&lt;id&gt;</code></td><td>JWT + id</td><td><code>200 [ reporte ]</code> o <code>[]</code> si no es suyo</td><td>Un ID ajeno devuelve vacío y la app muestra “no tienes permiso”.</td></tr>
+  <tr><td>Obtener URL de evidencia</td><td>POST</td><td><code>/storage/v1/object/sign/evidencias/&lt;ruta&gt;</code> · Storage</td><td><code>{ expiresIn: 600 }</code></td><td><code>200 { signedURL }</code></td><td>Solo el dueño o mantenimiento. La URL caduca a los 10 minutos.</td></tr>
+  <tr><td>Actualizar estado</td><td>PATCH</td><td><code>/rest/v1/reportes?id=eq.&lt;id&gt;</code> · API</td><td><code>{ estado: "en_proceso" | "resuelto" }</code></td><td><code>200</code> + reporte actualizado · <code>[]</code> si no tiene permiso</td><td>Solo el rol mantenimiento (RLS) y solo la columna <code>estado</code>.</td></tr>
+  <tr><td>Cerrar sesión</td><td>POST</td><td><code>/auth/v1/logout</code> · Auth</td><td>JWT</td><td><code>204</code></td><td>Revoca el refresh token y borra la sesión, la caché y la cola local.</td></tr>
+</table>
+
+<div class="qa">
+<h3>¿Por qué no se deben incluir credenciales administrativas en la aplicación móvil?</h3>
+<p>Porque <b>todo lo que se distribuye dentro de una app es público</b>. Un APK o IPA se puede descompilar en minutos (con apktool o strings, por ejemplo) y las variables de entorno del bundle de JavaScript quedan en texto legible. Una clave administrativa como la <code>service_role</code> de Supabase <b>ignora las políticas RLS</b>, así que con ella un atacante podría leer, modificar o borrar los reportes y fotos de toda la universidad, crear usuarios o escalar privilegios. Además no se podría revocar sin publicar una nueva versión, y los usuarios que no actualicen seguirían exponiéndola. Lo correcto es que la app use solo la clave pública más el <b>token del usuario autenticado</b>, y que las operaciones privilegiadas (asignar el rol de mantenimiento, por ejemplo) se hagan en el servidor: desde el panel, con una Edge Function o con un backend propio que guarde el secreto.</p>
+</div>
+
+<div class="qa">
+<h3>¿Qué validaciones deben realizarse antes de enviar un reporte?</h3>
+<ul>
+  <li><b>Sesión:</b> hay un token vigente; si caducó, se renueva o se pide iniciar sesión.</li>
+  <li><b>Categoría:</b> obligatoria y de la lista permitida (cómputo, iluminación, mobiliario, internet, eléctrica, otro).</li>
+  <li><b>Ubicación:</b> edificio y aula obligatorios, de 1 a 60 caracteres cada uno.</li>
+  <li><b>Descripción:</b> obligatoria, de 10 a 1000 caracteres, sin espacios sobrantes al inicio o al final (<code>trim</code>).</li>
+  <li><b>Fotografía (si hay):</b> tipo JPG/PNG/WEBP, tamaño mayor que 0 y de hasta 5 MB, sin metadatos EXIF.</li>
+  <li><b>Fecha:</b> no se pide ni se envía. La asigna el servidor (<code>now()</code>) para que no se pueda falsificar.</li>
+  <li><b>Conectividad:</b> antes de enviar se verifica la red. Sin red, el reporte va a la cola local.</li>
+  <li><b>Duplicados:</b> cada formulario lleva un <code>id_cliente</code> único y el botón se deshabilita mientras se envía.</li>
+</ul>
+<p>Estas validaciones mejoran la experiencia, pero <b>no sustituyen</b> a las del servidor: los mismos límites existen como <code>CHECK</code>, permisos por columna y restricciones del bucket, porque alguien podría llamar a la API sin usar la app.</p>
+</div>
+
+<div class="qa">
+<h3>¿Qué debe suceder si el servicio en la nube no está disponible?</h3>
+<ul>
+  <li><b>Detectarlo sin bloquear la app:</b> se revisa la red con NetInfo y cada solicitud tiene un tiempo máximo (20 s, 45 s para fotos). La interfaz nunca queda congelada.</li>
+  <li><b>No perder datos:</b> si al enviar no hay red o el servicio responde 5xx o no responde a tiempo, el reporte (con la foto copiada al almacenamiento privado de la app) se guarda en una <b>cola local</b> y se informa “Reporte guardado en el dispositivo”.</li>
+  <li><b>Reintentar de forma segura:</b> desde la lista se puede usar “Reintentar envío”. Gracias al <code>id_cliente</code>, aunque un intento anterior sí haya llegado, no se duplica.</li>
+  <li><b>Consulta degradada:</b> se muestra la última lista descargada (caché) con un aviso de la fecha, y la app indica claramente que está “Sin conexión”.</li>
+  <li><b>Mensajes claros y sin detalles técnicos</b>; los errores de validación (4xx) no se reintentan.</li>
+  <li><b>Seguridad offline:</b> en el dispositivo solo se guardan datos del propio reporte, nunca contraseñas. Al cerrar sesión se borran la cola y la caché.</li>
+</ul>
+</div>
+
+<!-- ============================ PARTE 5 ============================ -->
+<h2 class="page-break">Parte 5. Propuesta de pruebas y validación</h2>
+<p>Las pruebas se ejecutaron en un emulador Android (Pixel, API 37) con la app en Expo Go, contra el proyecto real de Supabase. Usé tres cuentas de prueba: <b>Ana López</b> (estudiante), <b>Bruno Díaz</b> (administrativo, dueño del reporte #1) y <b>Personal de Mantenimiento</b> (rol asignado desde el SQL Editor). En el emulador, la cámara es simulada, por eso la evidencia muestra una escena de prueba en lugar de una foto real. Las pruebas de seguridad se pueden repetir desde la pantalla <b>🛡️ Pruebas de seguridad</b> de la app, que lanza solicitudes no autorizadas contra el backend real.</p>
+<table>
+  <tr><th style="width:4%">#</th><th style="width:15%">Prueba</th><th style="width:15%">Objetivo</th><th style="width:24%">Pasos / datos de entrada</th><th style="width:21%">Resultado esperado</th><th>Resultado obtenido</th></tr>
+  <tr><td>P1</td><td>Autenticación correcta e incorrecta</td><td>Comprobar que solo entran usuarios válidos.</td><td>a) Correo válido + contraseña errónea.<br>b) Correo y contraseña correctos.</td><td>a) <code>400</code>, mensaje genérico, sin acceso.<br>b) <code>200</code>, token y acceso a “Mis reportes”.</td><td id="r1">a) Muestra “Correo o contraseña incorrectos” y limpia la contraseña. b) Entra y muestra nombre y tipo de usuario. <span class="ok">Aprobada</span> (Fig. 1–2)</td></tr>
+  <tr><td>P2</td><td>Registro de reporte con evidencia</td><td>Verificar el envío completo a la nube.</td><td>Categoría “Equipo de cómputo”, Edificio D, Lab. 3, descripción, foto con la cámara → Enviar. Probar también el formulario vacío.</td><td>Vacío: errores por campo, sin solicitud. Completo: <code>201</code>, folio, estado “Pendiente”, fecha del servidor y foto visible.</td><td id="r2">Se marcan los errores en cada campo. Con datos completos se crea el reporte #2 con fecha del servidor y la foto se recupera del bucket privado. <span class="ok">Aprobada</span> (Fig. 3–5)</td></tr>
+  <tr><td>P3</td><td>Consulta de información</td><td>Recuperar desde la nube solo los reportes del usuario.</td><td>Entrar como Ana, abrir la lista, filtrar por estado y volver a entrar.</td><td><code>200</code> con los reportes de Ana ordenados por fecha, con miniaturas. Los datos persisten tras cerrar la app.</td><td id="r3">La lista muestra solo los reportes de Ana (no aparece el #1 de Bruno), con folio, ubicación, estado y fecha, y el filtro funciona. <span class="ok">Aprobada</span> (Fig. 6)</td></tr>
+  <tr><td>P4</td><td>Acceso no autorizado a reportes de otro usuario</td><td>Validar que RLS impide ver o modificar datos ajenos.</td><td>Como Ana: ejecutar “Pruebas de seguridad” con el ID del reporte #1 de Bruno. Intentar insertar con otro <code>user_id</code>, marcar “resuelto”, subir a otra carpeta, llamar a la API sin token y con JWT alterado.</td><td>0 filas ajenas. Inserción, actualización y subida rechazadas. <code>401</code> sin token o con token alterado. El personal de mantenimiento sí ve todo.</td><td id="r4">8/8 pruebas superadas: el reporte de Bruno no se devuelve, el servidor responde <i>permission denied</i> o <i>row-level security</i>, y el JWT alterado recibe <code>401</code>. El rol mantenimiento ve los 4 reportes y cambia el #2 a “En proceso”. <span class="ok">Aprobada</span> (Fig. 7–9, 13)</td></tr>
+  <tr><td>P5</td><td>Comunicación sin conexión a internet</td><td>Comprobar que no se pierden datos y que los mensajes son claros.</td><td>Activar modo avión, registrar un reporte y abrir la lista. Desactivar el modo avión y pulsar “Reintentar envío”.</td><td>Aviso “Sin conexión”, reporte guardado en la cola, lista desde caché. Al reconectar se envía una sola vez.</td><td id="r5">Aparece “Reporte guardado en el dispositivo”. La lista muestra el aviso, el pendiente y la última consulta en caché. Al reconectar, “Reintentar envío” responde “Enviados: 1 · Pendientes: 0” y el reporte aparece una sola vez como #4. <span class="ok">Aprobada</span> (Fig. 10–12, 14)</td></tr>
+</table>
+
+<!-- ============================ EVIDENCIAS ============================ -->
+<h2 class="page-break">Aplicación funcionando (evidencias)</h2>
+<div class="shots">
+  <figure><img src="capturas/01-login.png"><figcaption>Fig. 1. Inicio de sesión contra Supabase Auth.</figcaption></figure>
+  <figure><img src="capturas/02-login-incorrecto.png"><figcaption>Fig. 2. P1: credenciales incorrectas, con mensaje genérico.</figcaption></figure>
+  <figure><img src="capturas/03-validaciones.png"><figcaption>Fig. 3. P2: validaciones antes de enviar.</figcaption></figure>
+</div>
+<div class="shots">
+  <figure><img src="capturas/04-nuevo-reporte.png"><figcaption>Fig. 4. Formulario con categoría, ubicación, descripción y evidencia.</figcaption></figure>
+  <figure><img src="capturas/05-reporte-creado.png"><figcaption>Fig. 5. P2: 201 Created, con folio, fecha del servidor y foto desde el bucket privado.</figcaption></figure>
+  <figure><img src="capturas/06-mis-reportes.png"><figcaption>Fig. 6. P3: “Mis reportes” consultados desde la nube.</figcaption></figure>
+</div>
+<div class="shots">
+  <figure><img src="capturas/07-pruebas-seguridad.png"><figcaption>Fig. 7. P4: 8/8 pruebas de acceso no autorizado superadas (Ana).</figcaption></figure>
+  <figure><img src="capturas/08-mantenimiento-lista.png"><figcaption>Fig. 8. Rol mantenimiento: ve los reportes de todos.</figcaption></figure>
+  <figure><img src="capturas/09-mantenimiento-estado.png"><figcaption>Fig. 9. Mantenimiento actualiza el estado (PATCH).</figcaption></figure>
+</div>
+<div class="shots">
+  <figure><img src="capturas/10-sin-conexion.png"><figcaption>Fig. 10. P5: sin internet, el reporte se guarda en el dispositivo.</figcaption></figure>
+  <figure><img src="capturas/11-pendientes.png"><figcaption>Fig. 11. P5: aviso “Sin conexión”, pendiente en cola y lista desde caché.</figcaption></figure>
+  <figure><img src="capturas/12-sincronizado.png"><figcaption>Fig. 12. P5: al reconectar, el pendiente llega como #4, sin duplicados.</figcaption></figure>
+</div>
+<div class="shots">
+  <figure><img src="capturas/07b-pruebas-seguridad.png"><figcaption>Fig. 13. P4 (detalle): respuestas del servidor a cada intento no autorizado.</figcaption></figure>
+  <figure><img src="capturas/12a-sincronizado.png"><figcaption>Fig. 14. P5: resultado de “Reintentar envío”.</figcaption></figure>
+</div>
+
+<h3>Estructura del proyecto</h3>
+<table class="plain">
+  <tr><th style="width:32%">Archivo</th><th>Responsabilidad</th></tr>
+  <tr><td><code>src/app/login.tsx</code>, <code>registro.tsx</code></td><td>Autenticación (rutas públicas, protegidas con <code>Stack.Protected</code>).</td></tr>
+  <tr><td><code>src/app/index.tsx</code></td><td>Lista de reportes, filtros, aviso offline, cola de pendientes y caché.</td></tr>
+  <tr><td><code>src/app/nuevo.tsx</code></td><td>Formulario, validaciones, cámara o galería y envío o encolado.</td></tr>
+  <tr><td><code>src/app/reporte/[id].tsx</code></td><td>Detalle, evidencia con URL firmada y cambio de estado (mantenimiento).</td></tr>
+  <tr><td><code>src/app/seguridad.tsx</code>, <code>lib/pruebasSeguridad.ts</code></td><td>Pruebas automáticas de acceso no autorizado contra el backend real.</td></tr>
+  <tr><td><code>src/lib/auth.tsx</code></td><td>Sesión, inicio de sesión, registro, cierre de sesión y bloqueo por intentos.</td></tr>
+  <tr><td><code>src/lib/reportes.ts</code>, <code>storage.ts</code></td><td>Operaciones de integración (REST y Storage) y validaciones.</td></tr>
+  <tr><td><code>src/lib/almacenSeguro.ts</code>, <code>red.ts</code>, <code>cola.ts</code>, <code>cache.ts</code></td><td>SecureStore, conectividad y errores, cola offline y caché.</td></tr>
+  <tr><td><code>supabase/schema.sql</code></td><td>Tablas, roles, trigger de perfil, permisos por columna, RLS y bucket privado.</td></tr>
+</table>
+
+<!-- ============================ CONCLUSIÓN ============================ -->
+<h2>Conclusión personal</h2>
+<p>Este caso me hizo ver que, cuando una app móvil se conecta a la nube, <b>la app no es la frontera de seguridad: el servidor sí</b>. Al principio es tentador “ocultar” un botón o filtrar los reportes por usuario en el código de la app, pero cualquiera puede descompilar el APK o llamar a la API directamente con otro ID. Por eso las decisiones importantes las movimos al backend: el rol lo asigna un trigger, cada fila se protege con RLS, las columnas sensibles no se pueden escribir y el bucket valida tipo y tamaño. La prueba P4 lo confirmó: con un token válido de estudiante, el servidor negó ver reportes ajenos, cambiar estados, subir a carpetas de otros o usar un token alterado.</p>
+<p>También aprendí que la codificación segura y la buena experiencia de usuario no se contraponen. Validar en el cliente da respuesta inmediata, los mensajes genéricos protegen contra la enumeración de cuentas, guardar el token en el Keystore no cambia nada para el usuario, y la cola offline con <code>id_cliente</code> hace que una red inestable no provoque pérdida ni duplicación de reportes. En una universidad, donde la app la usan cientos de personas en redes compartidas, aplicar estos principios desde el diseño (mínimo privilegio, defensa en profundidad, nunca confiar en el cliente y no incluir secretos en la app) es lo que permite confiar en los datos del sistema de mantenimiento.</p>
+
+</body>
+</html>
