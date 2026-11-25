@@ -5,13 +5,16 @@ import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from 'react-nat
 
 import { Aviso, Boton, colores, Dato, Insignia, Tarjeta } from '@/components/ui';
 import { useAuth } from '@/lib/auth';
+import { leerCache } from '@/lib/cache';
 import { ErrorServicio } from '@/lib/red';
 import { cambiarEstado, CATEGORIAS, ESTADOS, fechaLegible, obtenerReporte, type Estado, type Reporte } from '@/lib/reportes';
 import { urlFirmada } from '@/lib/storage';
 
 export default function DetalleReporte() {
   const { id, nuevo } = useLocalSearchParams<{ id: string; nuevo?: string }>();
-  const { perfil } = useAuth();
+  const { perfil, session } = useAuth();
+  const uid = session!.user.id;
+  const [sinConexion, setSinConexion] = useState(false);
   const [reporte, setReporte] = useState<Reporte | null>(null);
   const [foto, setFoto] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -26,12 +29,18 @@ export default function DetalleReporte() {
         setReporte(r);
         if (r.foto_path) setFoto(await urlFirmada(r.foto_path));
       } catch (e) {
-        setError(e instanceof ErrorServicio ? e.message : String(e));
+        const err = e instanceof ErrorServicio ? e : new ErrorServicio(String(e), 'servidor');
+        // Sin conexión: mostrar la copia de la última consulta guardada en el dispositivo.
+        const enCache = err.tipo === 'red' || err.tipo === 'servidor' ? (await leerCache(uid))?.reportes.find((r) => r.id === id) : undefined;
+        if (enCache) {
+          setReporte(enCache);
+          setSinConexion(true);
+        } else setError(err.message);
       } finally {
         setCargando(false);
       }
     })();
-  }, [id]);
+  }, [id, uid]);
 
   async function actualizar(estado: Estado) {
     if (!reporte) return;
@@ -53,6 +62,11 @@ export default function DetalleReporte() {
       {nuevo && reporte && (
         <Aviso tipo="exito" titulo={`✅ Reporte #${reporte.folio} registrado en la nube`}>
           <Text style={styles.suave}>El servidor respondió 201 Created y asignó folio, estado y fecha de registro.</Text>
+        </Aviso>
+      )}
+      {sinConexion && (
+        <Aviso tipo="aviso" titulo="📴 Sin conexión">
+          <Text style={styles.suave}>Mostrando la última copia guardada. La foto y el cambio de estado requieren internet.</Text>
         </Aviso>
       )}
       {error && <Aviso tipo="error" titulo={error} />}
