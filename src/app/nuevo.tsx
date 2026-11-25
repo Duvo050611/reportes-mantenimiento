@@ -3,7 +3,7 @@ import { File } from 'expo-file-system';
 import { Image } from 'expo-image';
 import * as ImagePicker from 'expo-image-picker';
 import { router } from 'expo-router';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { Alert, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { Aviso, Boton, Campo, Chip, colores, Tarjeta } from '@/components/ui';
@@ -24,7 +24,7 @@ function desdePicker(a: ImagePicker.ImagePickerAsset): FotoLocal {
 
 export default function NuevoReporte() {
   // El id del cliente se genera una sola vez por formulario: si se reintenta, no se duplica.
-  const idCliente = useRef(Crypto.randomUUID()).current;
+  const [idCliente] = useState(() => Crypto.randomUUID());
   const [categoria, setCategoria] = useState<Categoria | null>(null);
   const [edificio, setEdificio] = useState('');
   const [aula, setAula] = useState('');

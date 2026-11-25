@@ -11,8 +11,14 @@ const anonKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY;
 
 export const supabaseConfigurado = Boolean(url && anonKey);
 
-export const supabase = createClient(url ?? 'https://placeholder.supabase.co', anonKey ?? 'placeholder', {
+const urlEfectiva = url ?? 'https://placeholder.supabase.co';
+// Misma clave que supabase-js usa por defecto (sb-<ref>-auth-token), explícita para poder leer
+// la sesión guardada directamente cuando no hay internet (ver auth.tsx).
+export const CLAVE_SESION = `sb-${urlEfectiva.match(/^https?:\/\/([^./:]+)/)?.[1] ?? 'placeholder'}-auth-token`;
+
+export const supabase = createClient(urlEfectiva, anonKey ?? 'placeholder', {
   auth: {
+    storageKey: CLAVE_SESION,
     storage: almacenSeguro, // tokens cifrados en Keystore/Keychain
     autoRefreshToken: true,
     persistSession: true,
@@ -22,6 +28,8 @@ export const supabase = createClient(url ?? 'https://placeholder.supabase.co', a
 
 // Refresca el access token (JWT de 1 h) solo mientras la app está en primer plano.
 if (Platform.OS !== 'web') {
+  // El evento 'change' no se emite al arrancar: si la app ya abre en primer plano, iniciar aquí.
+  if (AppState.currentState === 'active') supabase.auth.startAutoRefresh();
   AppState.addEventListener('change', (state) => {
     if (state === 'active') supabase.auth.startAutoRefresh();
     else supabase.auth.stopAutoRefresh();
